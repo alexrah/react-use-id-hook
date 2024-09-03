@@ -1,5 +1,9 @@
 # react-use-id-hook
 
+## Disclaimer
+This is a fork of https://www.npmjs.com/package/react-use-id-hook which adds the ability to set a custom prefix to the generated ids
+
+## Description
 This is a tiny hook to create consisent id strings while rendering React, both when doing SSR and normally.
 
 This is useful for creating unique `id` attributes for DOM elements.
