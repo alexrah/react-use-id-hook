@@ -1,10 +1,9 @@
-import React, {
-	FunctionComponent,
-	createContext,
-	useContext,
-	useRef,
-} from 'react'
-import PropTypes from 'prop-types'
+import React, {createContext, useContext, useRef} from 'react'
+
+type tIdProviderProps = {
+	children: React.ReactNode
+	prefix?: string
+}
 
 const Id = createContext<() => string>(() => {
 	throw new TypeError('Please wrap your application with IdProvider')
@@ -14,20 +13,20 @@ type IdState = {
 	id: number
 	get(): string
 }
-const useIdGetter = (prefix = 'id') => {
+const useIdGetter = (prefix: string) => {
+	let prefixFormatted = prefix.length > 0 ? `${prefix}-` : ''
 	const ref = useRef<IdState>()
 	if (!ref.current) {
-		const me = {id: 0, get: () => `${prefix}-${me.id++}`}
+		const me = {id: 0, get: () => `${prefixFormatted}${me.id++}`}
 		ref.current = me
 	}
 	return ref.current.get
 }
 
-export const IdProvider: FunctionComponent = ({children}) => {
-	const get = useIdGetter()
+export const IdProvider = ({children, prefix = 'id'}: tIdProviderProps) => {
+	const get = useIdGetter(prefix)
 	return <Id.Provider value={get}>{children}</Id.Provider>
 }
-IdProvider.propTypes = {children: PropTypes.node.isRequired}
 
 export const useId = () => {
 	const getter = useContext(Id)
